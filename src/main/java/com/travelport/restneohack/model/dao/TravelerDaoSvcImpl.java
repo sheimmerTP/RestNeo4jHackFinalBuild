@@ -94,7 +94,7 @@ public class TravelerDaoSvcImpl {
         
         String travEMail= traveler.getEmailAddress();
  //       traveler = findByEmailAddress(travEMail);
-        traveler.add(address);
+        traveler.addAddress(address);
         return travelerRepository.save(traveler);
         
     }
@@ -139,24 +139,24 @@ public class TravelerDaoSvcImpl {
         EmailAddress lukeEmail = new EmailAddress ("lskywalker@alliance.com");
         Traveler travelerLuke = new Traveler ("Luke", "Skywalker", lukeEmail.getEmail());
         Address lukeAddress = new Address ("125 Broadyway", "New York", usa);
-        travelerLuke.add(lukeAddress);
+        travelerLuke.addAddress(lukeAddress);
         System.out.println("Traveler @ getAddresses() = " + travelerLuke.getAddresses().size());
       //  travelerRepository.save(travelerLuke);
         
         EmailAddress vaderEmail = new EmailAddress ("darthVader@empire.com");
         Traveler travelerVader = new Traveler ("Darth", "Vader", vaderEmail.getEmail());
         Address vaderAddress = new Address ("555 Death Star ln", "New York", usa);
-        travelerVader.add(vaderAddress);
+        travelerVader.addAddress(vaderAddress);
         
         EmailAddress chewyEmail = new EmailAddress ("chewbacca@alliance.com");
         Traveler travelerChewy = new Traveler ("Chew", "bacca ", chewyEmail.getEmail());
         Address chewyAddress = new Address ("6623 Delta Dr", "Texas", usa);
-        travelerChewy.add(chewyAddress);
+        travelerChewy.addAddress(chewyAddress);
         
         EmailAddress obiWanEmail = new EmailAddress ("obiKenobi@JediAcademy.com");
         Traveler travelerObiWan = new Traveler ("Obi-Wan ", "Kenobi", obiWanEmail.getEmail());
         Address obiWanAddress = new Address ("7895 Yang Ching ln", "Hong Kong", China);
-        travelerObiWan.add(obiWanAddress);
+        travelerObiWan.addAddress(obiWanAddress);
         
         //Create travelers in graphdb and add travelers to list
         travelers.add(createTraveler(travelerLuke));
@@ -171,51 +171,30 @@ public class TravelerDaoSvcImpl {
     public void persistTravelertoDd(Traveler traveler, Set<Address> addresses, FormOfPayment FOP) {
         
         
-        Traveler persistTraveler = template.save(traveler);
+        Traveler persistTraveler = new Traveler();
         
         
         for (Address travelerAddress: addresses){
-            Country country = travelerAddress.getCountry();
-            template.save(country);
-            template.save(travelerAddress);
-            System.out.println("Address to be added to persistTraveler = " + 
-                    travelerAddress.getStreet() + " " + travelerAddress.getCity());
-            persistTraveler.add(travelerAddress);
+       
+            traveler.addAddress(travelerAddress);
         }
+
+     //   System.out.println("traveler addresses = " + persistTraveler.getAddresses().);
+        persistTraveler = template.save(traveler);
         
         template.save(FOP);
         
         AccountView accountView = new AccountView(persistTraveler);
         accountView.add(FOP,2);
+        
+        Iterator iter = addresses.iterator();
+        Object address = iter.next();
+        System.out.println("billing address = " + address.toString());
+//        accountView.withBillingAddress((Address) address);
+        
         template.save(accountView);
         
-       
-//        template.save(address);
-//        template.save(country);
-//        address.
-//        template.save(new Traveler("Carter","Beauford","carter@dmband.com"));
-//        template.save(new Traveler("Boyd","Tinsley","boyd@dmband.com"));
-//        final Country usa = template.save(new Country("US", "United States"));
-//        template.save(new Address("27 Broadway","New York",usa));
-//        iPad = template.save(new FormOfPayment("iPad", "Apple tablet device").withPrice(BigDecimal.valueOf(499D)));
-//        mbp = template.save(new FormOfPayment("MacBook Pro", "Apple notebook").withPrice(BigDecimal.valueOf(1299D)));
-//        final AccountView accountView = new AccountView(dave);
-//        accountView.add(FOP,2);
-//        template.save(accountView);
-//        
-//        template.s
-//                
-//                
-//                 dave = template.save(new Traveler("Dave", "Matthews", "dave@dmband.com"));
-//        template.save(new Traveler("Carter","Beauford","carter@dmband.com"));
-//        template.save(new Traveler("Boyd","Tinsley","boyd@dmband.com"));
-//        final Country usa = template.save(new Country("US", "United States"));
-//        template.save(new Address("27 Broadway","New York",usa));
-//        iPad = template.save(new FormOfPayment("iPad", "Apple tablet device").withPrice(BigDecimal.valueOf(499D)));
-//        mbp = template.save(new FormOfPayment("MacBook Pro", "Apple notebook").withPrice(BigDecimal.valueOf(1299D)));
-//        final AccountView accountView = new AccountView(dave);
-//        accountView.add(iPad,2);
-//        accountView.add(mbp,1);
-//        template.save(accountView);
+       //find addresses from db and serialize to shipping/billing address 
+
     }
 }

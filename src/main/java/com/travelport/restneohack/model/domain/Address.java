@@ -26,7 +26,7 @@ public class Address {
 	public Address(String street, String city, Country country) {
 		this.street = street;
 		this.city = city;
-        this.country = country;
+                this.country = country;
     }
 
 	public Address() {
@@ -34,7 +34,7 @@ public class Address {
 	}
         
         public Long getId() {
-    	return id;
+                return id;
         }
 
 	public String getStreet() {
@@ -48,5 +48,10 @@ public class Address {
 	public Country getCountry() {
 		return country;
 	}
+        
+        @Override
+        public String toString(){
+            return String.format("%s %s <%s>", street, city, country);
+        }
     
 }

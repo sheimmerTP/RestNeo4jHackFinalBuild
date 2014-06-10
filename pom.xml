@@ -83,6 +83,8 @@
             <artifactId>spring-data-neo4j</artifactId>
             <version>${spring-data-neo4j.version}</version>
         </dependency>
+        
+
         <!-- Hibernate implementation of the JSR-303 Bean Validation Spec API.
             (SDN makes use of the javax.validation:validation-api dependency and
             hibernate provides a concrete implementation -->
