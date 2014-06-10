@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.springframework.data.neo4j.examples.hellograph.domain;
+package com.travelport.restneohack.model.domain;
 
 /**
  *

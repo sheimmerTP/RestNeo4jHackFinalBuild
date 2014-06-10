@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.springframework.data.examples</groupId>
-	<artifactId>spring-data-neo4j-hello-worlds</artifactId>
+	<artifactId>RestNeo4jHack</artifactId>
 	<version>3.0.2.BUILD-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Spring Data Neo4j hello-worlds</name>
+	<name>RestNeo4jHack</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,7 +1,10 @@
-package org.springframework.data.neo4j.examples.hellograph;
+package com.travelport.restneohack.model.test.dao;
 
+import com.travelport.restneohack.model.dao.TravelerDaoSvcImpl;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -9,11 +12,12 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.examples.hellograph.domain.Address;
-import org.springframework.data.neo4j.examples.hellograph.domain.Country;
-import org.springframework.data.neo4j.examples.hellograph.domain.EmailAddress;
-import org.springframework.data.neo4j.examples.hellograph.domain.Traveler;
-import org.springframework.data.neo4j.examples.hellograph.repositories.TravelerRepository;
+import com.travelport.restneohack.model.domain.Address;
+import com.travelport.restneohack.model.domain.Country;
+import com.travelport.restneohack.model.domain.EmailAddress;
+import com.travelport.restneohack.model.domain.FormOfPayment;
+import com.travelport.restneohack.model.domain.Traveler;
+import com.travelport.restneohack.model.repositories.TravelerRepository;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.data.neo4j.support.node.Neo4jHelper;
 import org.springframework.test.annotation.Rollback;
@@ -23,9 +27,9 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(locations = "classpath:/spring/helloWorldContext.xml")
+@ContextConfiguration(locations = "classpath:/spring/ApplicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-@TransactionConfiguration(defaultRollback=true) //turn this to true to rollback any changes and unpopulate the db
+@TransactionConfiguration(defaultRollback=false) //turn this to true to rollback any changes and unpopulate the db
 @Transactional
 public class TravelerDaoSvcTest {
 
@@ -99,6 +103,25 @@ public class TravelerDaoSvcTest {
                 
                 assertNotNull(foundTraveler);
         }
+    }
+        
+        @Test
+        public void persistTravelertoDd() {
+            Set<Address> addresses = new HashSet<>();
+        
+            Traveler hanSolo = new Traveler ("Han", "Solo", "hanSolo@Rebels.com");
+            Country usa = new Country ("US","Unisted States of America");
+            Address billingAddress = new Address("27 Broadway", "New York", usa);
+            addresses.add(billingAddress);
+            FormOfPayment fop = new FormOfPayment("Visa", "5526-5584-8856-9985");
+
+            dataImpl.persistTravelertoDd(hanSolo, addresses, fop);
+
+            Traveler foundTraveler = dataImpl.findByEmailAddress("hanSolo@Rebels.com");
+
+            assertNotNull(foundTraveler);
+       
+        
     }
 	
 }

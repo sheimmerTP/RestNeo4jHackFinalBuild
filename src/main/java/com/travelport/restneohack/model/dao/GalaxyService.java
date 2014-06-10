@@ -1,8 +1,8 @@
-package org.springframework.data.neo4j.examples.hellograph;
+package com.travelport.restneohack.model.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.examples.hellograph.domain.World;
-import org.springframework.data.neo4j.examples.hellograph.repositories.WorldRepository;
+import com.travelport.restneohack.model.domain.World;
+import com.travelport.restneohack.model.repositories.WorldRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

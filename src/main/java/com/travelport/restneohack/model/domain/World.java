@@ -1,4 +1,4 @@
-package org.springframework.data.neo4j.examples.hellograph.domain;
+package com.travelport.restneohack.model.domain;
 
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.*;

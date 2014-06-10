@@ -1,15 +1,17 @@
-package org.springframework.data.neo4j.examples.hellograph;
+package com.travelport.restneohack.model.test.dao;
 
+import com.travelport.restneohack.model.dao.GalaxyService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.examples.hellograph.domain.World;
+import com.travelport.restneohack.model.domain.World;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.data.neo4j.support.node.Neo4jHelper;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -19,11 +21,12 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-@ContextConfiguration(locations = "classpath:/spring/helloWorldContext.xml")
+@ContextConfiguration(locations = "classpath:/spring/ApplicationContext-subRef-TRS.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class GalaxyServiceTest {
-
+@TransactionConfiguration(defaultRollback = false)
+public class SubRefBasedTRSGalaxyServiceTest {
+	
 	@Autowired
 	private GalaxyService galaxyService;
 	
@@ -40,7 +43,6 @@ public class GalaxyServiceTest {
     public void shouldAllowDirectWorldCreation() {
 		assertEquals(0, galaxyService.getNumberOfWorlds());
 		World myWorld = galaxyService.createWorld("mine", 0);
-                System.out.println("myWord= " + myWorld);
         assertEquals(1, galaxyService.getNumberOfWorlds());
         
         Iterable<World> foundWorlds = galaxyService.getAllWorlds();
@@ -59,7 +61,7 @@ public class GalaxyServiceTest {
     	galaxyService.makeSomeWorlds();
     	
         for(World world : galaxyService.getAllWorlds()) {
-        	World foundWorld = galaxyService.findWorldById(world.getId());
+        	World foundWorld = galaxyService.findWorldById(world.getId()); 
             assertNotNull(foundWorld);
         }
     }

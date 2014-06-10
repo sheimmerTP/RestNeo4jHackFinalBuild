@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package org.springframework.data.neo4j.examples.hellograph.repositories;
+package com.travelport.restneohack.model.repositories;
 
-import org.springframework.data.neo4j.examples.hellograph.domain.Traveler;
+import com.travelport.restneohack.model.domain.Traveler;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.neo4j.repository.NamedIndexRepository;
 

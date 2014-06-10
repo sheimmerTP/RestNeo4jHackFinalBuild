@@ -4,14 +4,18 @@
  * and open the template in the editor.
  */
 
-package org.springframework.data.neo4j.examples.hellograph;
+package com.travelport.restneohack.model.dao;
 
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import static org.neo4j.graphdb.DynamicRelationshipType.withName;
 import org.neo4j.graphdb.GraphDatabaseService;
 
@@ -30,12 +34,16 @@ import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.data.neo4j.core.GraphDatabase;
-import org.springframework.data.neo4j.examples.hellograph.domain.Address;
-import org.springframework.data.neo4j.examples.hellograph.domain.Country;
-import org.springframework.data.neo4j.examples.hellograph.domain.EmailAddress;
-import org.springframework.data.neo4j.examples.hellograph.domain.Traveler;
-import org.springframework.data.neo4j.examples.hellograph.domain.World;
-import org.springframework.data.neo4j.examples.hellograph.repositories.TravelerRepository;
+import com.travelport.restneohack.model.domain.AccountView;
+import com.travelport.restneohack.model.domain.Address;
+import com.travelport.restneohack.model.domain.Country;
+import com.travelport.restneohack.model.domain.EmailAddress;
+import com.travelport.restneohack.model.domain.FormOfPayment;
+import com.travelport.restneohack.model.domain.Traveler;
+import com.travelport.restneohack.model.domain.World;
+import com.travelport.restneohack.model.repositories.FormOfPaymentRepository;
+import com.travelport.restneohack.model.repositories.TravelerRepository;
+import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +61,11 @@ public class TravelerDaoSvcImpl {
     @Autowired
     private TravelerRepository travelerRepository;
     
+    @Autowired
+    private FormOfPaymentRepository formOfPaymentRepository;
+    
+    @Autowired
+    private Neo4jTemplate template;
     
  //   @Autowired
  //   GraphDatabase graphDatabase;
@@ -153,5 +166,56 @@ public class TravelerDaoSvcImpl {
 
         
         return travelers;
+    }
+    
+    public void persistTravelertoDd(Traveler traveler, Set<Address> addresses, FormOfPayment FOP) {
+        
+        
+        Traveler persistTraveler = template.save(traveler);
+        
+        
+        for (Address travelerAddress: addresses){
+            Country country = travelerAddress.getCountry();
+            template.save(country);
+            template.save(travelerAddress);
+            System.out.println("Address to be added to persistTraveler = " + 
+                    travelerAddress.getStreet() + " " + travelerAddress.getCity());
+            persistTraveler.add(travelerAddress);
+        }
+        
+        template.save(FOP);
+        
+        AccountView accountView = new AccountView(persistTraveler);
+        accountView.add(FOP,2);
+        template.save(accountView);
+        
+       
+//        template.save(address);
+//        template.save(country);
+//        address.
+//        template.save(new Traveler("Carter","Beauford","carter@dmband.com"));
+//        template.save(new Traveler("Boyd","Tinsley","boyd@dmband.com"));
+//        final Country usa = template.save(new Country("US", "United States"));
+//        template.save(new Address("27 Broadway","New York",usa));
+//        iPad = template.save(new FormOfPayment("iPad", "Apple tablet device").withPrice(BigDecimal.valueOf(499D)));
+//        mbp = template.save(new FormOfPayment("MacBook Pro", "Apple notebook").withPrice(BigDecimal.valueOf(1299D)));
+//        final AccountView accountView = new AccountView(dave);
+//        accountView.add(FOP,2);
+//        template.save(accountView);
+//        
+//        template.s
+//                
+//                
+//                 dave = template.save(new Traveler("Dave", "Matthews", "dave@dmband.com"));
+//        template.save(new Traveler("Carter","Beauford","carter@dmband.com"));
+//        template.save(new Traveler("Boyd","Tinsley","boyd@dmband.com"));
+//        final Country usa = template.save(new Country("US", "United States"));
+//        template.save(new Address("27 Broadway","New York",usa));
+//        iPad = template.save(new FormOfPayment("iPad", "Apple tablet device").withPrice(BigDecimal.valueOf(499D)));
+//        mbp = template.save(new FormOfPayment("MacBook Pro", "Apple notebook").withPrice(BigDecimal.valueOf(1299D)));
+//        final AccountView accountView = new AccountView(dave);
+//        accountView.add(iPad,2);
+//        accountView.add(mbp,1);
+//        template.save(accountView);
     }
 }
